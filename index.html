@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>随机生成 Emoji</title>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+  </head>
+  <body>
+  <header>
+<h1 class="title">随机生成 Emoji</h1>
+</header>
+  <section class="container">
+    <canvas id="myCanvas" width="500" height="500"></canvas>
+    <br />
+    <label for="count">Emoji 数量：</label>
+    <input type="number" id="count" name="count" value="50" min="1" max="1000" />
+    <br />
+    <label for="emojis" class="emojis-label" id="emojis-label">Emoji 列表（用英文逗号分隔）：</label>
+    <input type="text" id="emojis" name="emojis" value="🤔,😴,🥵,🤯,🥴,😭" />
+    <br />
+    <button onclick="start()">开始生成</button>
+    <button onclick="download()">下载</button>
+	<p>常用emoji:😀 😁 😂 🤣 😃 😄 😅 😆 😉 😊 😋 😎 😍 😘 😗 😙 😚 ☺️ 🙂 🤗 🤔 😐 😑 😶 😏 😣 😥 😮 🤐 😯 😪 😫 😴 😌 😛 😜 😝 🤤 😒 😓 😔 😕 🙃 🤑 😲 😷 🤢 🤧 🤠 😇 🤥 🤫 🤭 🧐 🤓 😈 👿 💩</p>
+    </section>
+    <script>
+      const canvas = document.getElementById("myCanvas");
+      const ctx = canvas.getContext("2d");
+      let count = 300;
+      let counter = 0;
+      let emojis = ["😀", "😆", "😍", "🤔", "😴"];
+
+      function generateEmoji() {
+        const size = Math.floor(Math.random() * 45) + 50;
+        const x = Math.random() * (canvas.width - size);
+        const y = Math.random() * (canvas.height - size);
+        const emojiIndex = Math.floor(Math.random() * emojis.length);
+        const emoji = emojis[emojiIndex];
+
+        ctx.font = `${size}px Arial`;
+        ctx.fillText(emoji, x, y);
+
+        counter++;
+
+        if (counter >= count) {
+          clearInterval(intervalID);
+        }
+      }
+
+      let intervalID;
+
+      function start() {
+        count = document.getElementById("count").value;
+        counter = 0;
+        emojis = document.getElementById("emojis").value.split(",");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        intervalID = setInterval(generateEmoji, 100);
+      }
+
+      function download() {
+        const dataURL = canvas.toDataURL();
+        saveAs(dataURL, 'img.png');
+      }
+    </script>
+  <footer>
+    <p>© 2023 小Jack</p>
+  </footer>
+  </body>
+</html>
